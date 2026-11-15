@@ -16,6 +16,7 @@ if not st.session_state.logged_in:
 
     name = st.text_input("👤 NAME ?")
     roll = st.text_input("🆔 Roll No / Register No - Ex: RA2611000000000")
+    st.success(f"👋 Hello {st.session_state.user_name}! | {st.session_state.user_roll} | {st.session_state.user_mail} | {st.session_state.user_campus}")
     campus_login = st.selectbox("🏫 Campus", ["Trichy Campus", "KTR Campus - Chennai 🔥", "Ramapuram", "Vadapalani", "Delhi NCR", "Amaravati"])
     password = st.text_input("🔑 Password - Edhuvum Vechuko (Ex: topper123)", type="password")
 

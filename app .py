@@ -1,58 +1,43 @@
 import streamlit as st
-import pandas as pd
-import math
 
-st.set_page_config(page_title="AttendAI", page_icon="🤖")
-st.markdown("<h1 style='text-align:center; color:#2563EB;'>🤖 AttendAI</h1>", unsafe_allow_html=True)
-st.markdown("<p style='text-align:center;'>AI Attendance Predictor | 75% Safe-a Irukkiya?</p>", unsafe_allow_html=True)
+st.set_page_config(page_title="B.Tech Doubt App", page_icon="🎓")
+st.title("🎓 B.Tech Doubt & Study App")
+st.write("1st - 4th Year | All Branches")
 
-if 'data' not in st.session_state:
-    st.session_state.data = []
+year = st.selectbox("Year Select Pannu", ["1st Year", "2nd Year", "3rd Year", "4th Year"])
+branch = st.selectbox("Branch Select Pannu", ["CSE", "IT", "ECE", "EEE", "Mech", "Civil", "Other"])
 
-st.write("---")
-st.subheader("➕ Student Details Podu")
-name = st.text_input("Student Name")
-total = st.number_input("Total Class Attended - Total Class Evlo?", min_value=0, step=1)
-present = st.number_input("Total Present - Evlo Naal Present?", min_value=0, step=1)
+subjects = {
+    "1st Year": ["Maths-1", "Physics", "Chemistry", "C Programming", "English"],
+    "2nd Year": ["Maths-2", "DSA", "Python", "Digital Logic", "OOPS"],
+    "3rd Year": ["DBMS", "OS", "CN", "Java", "Machine Learning"],
+    "4th Year": ["AI", "Project", "Cloud Computing", "Cyber Security", "Placement"]
+}
+subject = st.selectbox("Subject Select Pannu", subjects[year])
 
-if st.button("Calculate ✅"):
-    if name == "":
-        st.warning("Name Podu!")
-    elif present > total:
-        st.error("Present, Total-a Vida Perusa Irukka Mudiyadhu!")
-    elif total == 0:
-        st.warning("Total Class 0-va Irukka Mudiyadhu!")
-    else:
-        absent = total - present
-        perc = round(present / total * 100, 1)
-        st.session_state.data.append({"Name": name, "Total": total, "Present": present, "Absent": absent, "Percentage %": perc})
-        st.success(f"{name} Added! Percentage: {perc}%")
+tab1, tab2, tab3 = st.tabs(["Doubt Kekkanum", "Notes", "CGPA Calculator"])
 
-st.write("---")
-st.subheader("📊 Report + 🤖 AI Predictor")
-if len(st.session_state.data) > 0:
-    df = pd.DataFrame(st.session_state.data)
-    st.table(df)
-    for d in st.session_state.data:
-        n = d["Name"]
-        total = d["Total"]
-        present = d["Present"]
-        perc = d["Percentage %"]
-        st.markdown(f"**{n} - {perc}%**")
-        if perc >= 75:
-            can_bunk = math.floor(present / 0.75 - total)
-            if can_bunk > 0:
-                st.success(f"✅ Safe! Innum {can_bunk} Naal Leave Edukkalam!")
-            else:
-                st.success(f"✅ Safe! Aana Leave Edukka Mudiyadhu!")
+with tab1:
+    st.subheader(f"{year} - {subject} Doubt")
+    doubt = st.text_area("Un Doubt-a Inga Type Pannu")
+    if st.button("Doubt Save Pannu"):
+        if doubt:
+            st.success("Doubt Save Aayiduchu!")
+            st.write("Un Doubt:", doubt)
         else:
-            need = math.ceil((0.75 * total - present) / 0.25)
-            st.error(f"⚠️ Danger! Safe Aaga Innum Thodarnthu {need} Naal Present Irukanum!")
-            future = round((present + 10) / (total + 10) * 100, 1)
-            st.info(f"💡 AI Tip: Adutha 10 Naal Present Irundha {future}% Aayidum!")
-        st.write("---")
-    if st.button("Clear All 🗑️"):
-        st.session_state.data = []
-        st.rerun()
-else:
-    st.info("Innum Yaarum Illa, Mela Details Podu!")
+            st.warning("Doubt Type Pannu Da!")
+
+with tab2:
+    st.subheader("Important Topics")
+    st.info(f"{subject} - Important: Unit 1, Unit 2, Previous Year Questions, Lab Manual")
+
+with tab3:
+    st.subheader("CGPA Calculator")
+    s1 = st.number_input("Sem 1 GPA", 0.0, 10.0, 8.0)
+    s2 = st.number_input("Sem 2 GPA", 0.0, 10.0, 8.0)
+    if st.button("CGPA Calculate"):
+        cgpa = (s1+s2)/2
+        st.success(f"Un CGPA: {cgpa:.2f}")
+        st.write("Percentage:", round(cgpa*9.5, 2), "%")
+
+st.write("Made by Tharun | B.Tech App")

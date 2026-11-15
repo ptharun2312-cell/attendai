@@ -14,8 +14,8 @@ if not st.session_state.logged_in:
     st.write("### 🔐 Sign In Pannu Da!")
     st.write("SRM Students Mattum Ulla Poga Mudiyum!")
 
-    name = st.text_input("👤 Un Peru Enna?")
-    roll = st.text_input("🆔 Roll No / Register No - Ex: RA2311000000000")
+    name = st.text_input("👤 NAME ?")
+    roll = st.text_input("🆔 Roll No / Register No - Ex: RA2611000000000")
     campus_login = st.selectbox("🏫 Campus", ["Trichy Campus", "KTR Campus - Chennai 🔥", "Ramapuram", "Vadapalani", "Delhi NCR", "Amaravati"])
     password = st.text_input("🔑 Password - Edhuvum Vechuko (Ex: topper123)", type="password")
 
@@ -25,7 +25,7 @@ if not st.session_state.logged_in:
             st.session_state.user_name = name
             st.session_state.user_roll = roll
             st.session_state.user_campus = campus_login
-            st.success(f"Vanakkam {name}! 🔥 Login Success!")
+            st.success(f"HELLO {name}! 🔥 Login Success!")
             st.rerun()
         else:
             st.error("Dei! Peru, Roll No, Password Ellam Fill Pannu Da!")

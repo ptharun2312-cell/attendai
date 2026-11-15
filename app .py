@@ -21,12 +21,14 @@ if not st.session_state.logged_in:
     password = st.text_input("🔑 Password - Edhuvum Vechuko (Ex: topper123)", type="password")
 
     if st.button("🚀 LOGIN - TOPPER MAKER Ulla Po!"):
-        if name and roll and password:
+    if name and roll and srm_mail and password:
+        if "@srmist.edu.in" not in srm_mail and "@srmtrichy.edu.in" not in srm_mail:
+            st.error("Dei! SRM Mail ID Mattum Dhaan Da! Ex: tharun@srmist.edu.in")
+        else:
             st.session_state.logged_in = True
             st.session_state.user_name = name
             st.session_state.user_roll = roll
-            st.session_state.user_campus = campus_login
-            st.success(f"HELLO {name}! 🔥 Login Success!")
+            st.session_state.user_mail = srm_mail
             st.rerun()
         else:
             st.error("Dei! Peru, Roll No, Password Ellam Fill Pannu Da!")

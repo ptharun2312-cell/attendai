@@ -1,126 +1,237 @@
 import streamlit as st
 from datetime import date, timedelta
 
-st.set_page_config(page_title="SRM Trichy - AI Teacher + Placement + Timetable", page_icon="🏫")
+st.set_page_config(page_title="SRM Trichy - ALL Branches + ECEDS", page_icon="🏫")
 st.title("🏫 SRM IST - Trichy Campus")
-st.subheader("🤖 AI Teacher + 💼 Placement + 📅 Sem Exam Timetable")
-st.write("SRM Institute of Science & Technology, Trichy | ALL BRANCHES")
+st.subheader("🤖 AI Teacher + 💼 Placement + 📅 Timetable")
+st.write("ALL BRANCHES | 2026 Regulation | SRM Trichy")
 
-branch = st.selectbox("Branch Select Pannu", ["BME - Biomedical", "CSE - Computer Science", "IT - Information Technology", "ECE - Electronics", "EEE - Electrical", "Mech - Mechanical", "Civil - Civil", "AIDS - AI & Data Science", "CYS - Cyber Security"])
+# --- ALL BRANCHES - SRM TRICHY ---
+branch = st.selectbox("Branch Select Pannu", [
+    "BME - Biomedical",
+    "CSE - Computer Science",
+    "CSE (AI & ML) - Artificial Intelligence",
+    "CSE (Cyber Security)",
+    "CSE (Data Science)",
+    "IT - Information Technology",
+    "ECE - Electronics & Communication",
+    "ECEDS - ECE (Data Science) ⭐ NEW",
+    "EEE - Electrical & Electronics",
+    "Mech - Mechanical",
+    "Civil - Civil",
+    "Biotech - Biotechnology",
+    "AIDS - AI & Data Science"
+])
+
 year = st.selectbox("Year", ["1st Year", "2nd Year", "3rd Year", "4th Year"])
+sem = st.selectbox("Semester", ["Sem 1", "Sem 2", "Sem 3", "Sem 4", "Sem 5", "Sem 6", "Sem 7", "Sem 8"])
 
-all_subjects = {
-    "BME - Biomedical": ["Anatomy", "Physiology", "Biomedical Instrumentation", "Medical Imaging", "Biomechanics", "Biomaterials"],
-    "CSE - Computer Science": ["Python", "DSA", "DBMS", "OS", "CN", "Java", "ML"],
-    "IT - Information Technology": ["Python", "DSA", "DBMS", "Web Dev", "Cloud", "Cyber Security"],
-    "ECE - Electronics": ["Digital Electronics", "VLSI", "Embedded Systems", "Communication", "Microcontroller"],
-    "EEE - Electrical": ["Circuit Theory", "Electrical Machines", "Power Systems", "Control Systems"],
-    "Mech - Mechanical": ["Thermodynamics", "Fluid Mechanics", "Machine Design", "Robotics", "CAD"],
-    "Civil - Civil": ["Surveying", "Structural Engineering", "Geotechnical", "Concrete Technology"],
-    "AIDS - AI & Data Science": ["Python", "Machine Learning", "Deep Learning", "Data Science", "Statistics"],
-    "CYS - Cyber Security": ["Cyber Security", "Ethical Hacking", "Cryptography", "Networks", "Python"]
+# --- 2026 REGULATION SEM 1 - COMMON FOR ALL + BRANCH SPECIAL ---
+all_branch_subjects = {
+    "BME - Biomedical": {
+        "Sem 1": ["Communicative English", "Calculus and Linear Algebra", "Physics: Electromagnetic Theory, Quantum, Waves & Optics", "Chemistry", "Biomedical Sensors", "Engineering Graphics and Design", "Philosophy of Engineering", "Professional Skills"],
+        "Sem 2": ["Advanced Calculus", "Human Anatomy and Physiology", "Biology for Engineers", "Programming in Python", "Electrical & Electronics Engineering", "Environmental Science"],
+        "Sem 3": ["Biomedical Instrumentation", "Biomechanics", "Biomaterials", "Probability & Statistics"],
+        "Sem 4": ["Medical Electronics", "Biomedical Signals & Systems", "Biocontrol Systems"],
+        "Sem 5": ["Medical Imaging Systems", "Biomedical Signal Processing"],
+        "Sem 6": ["Rehabilitation Engineering", "Hospital Management"],
+        "Sem 7": ["Telemedicine", "Artificial Organs"],
+        "Sem 8": ["Major Project", "Internship"],
+    },
+    "ECEDS - ECE (Data Science) ⭐ NEW": {
+        "Sem 1": ["Communicative English", "Calculus and Linear Algebra", "Physics: Electromagnetic Theory, Quantum, Waves & Optics", "Chemistry", "Engineering Graphics and Design", "Philosophy of Engineering", "Professional Skills", "Biomedical Sensors / Basic Engineering"],
+        "Sem 2": ["Advanced Calculus and Complex Analysis", "Programming in Python", "Electrical & Electronics Engineering", "Biology for Engineers", "Environmental Science", "Constitution of India"],
+        "Sem 3": ["Digital Logic Design", "Data Structures & Algorithms", "Signals & Systems", "Probability & Statistics for Data Science", "Electronic Devices & Circuits"],
+        "Sem 4": ["Microcontroller & Embedded Systems", "Database Management Systems", "Communication Systems", "Machine Learning Basics", "Analog & Digital Circuits"],
+        "Sem 5": ["VLSI Design", "Deep Learning", "Data Science & Big Data Analytics", "Digital Signal Processing", "Computer Networks"],
+        "Sem 6": ["5G & Wireless Communication", "AI for Electronics", "IoT & Embedded AI", "Cloud Computing"],
+        "Sem 7": ["Advanced Data Science", "Antenna & Microwave", "Elective - NLP / Computer Vision"],
+        "Sem 8": ["Major Project - ECE + Data Science", "Internship"],
+    },
+    "ECE - Electronics & Communication": {
+        "Sem 1": ["Communicative English", "Calculus and Linear Algebra", "Physics", "Chemistry", "Engineering Graphics", "Philosophy of Engineering"],
+        "Sem 2": ["Advanced Calculus", "Programming in Python", "Electrical & Electronics", "Biology for Engineers"],
+        "Sem 3": ["Digital Logic", "Signals & Systems", "Electronic Devices", "Network Theory"],
+        "Sem 4": ["Microcontroller", "Communication Systems", "Analog Circuits"],
+        "Sem 5": ["VLSI", "Digital Signal Processing", "Computer Networks"],
+        "Sem 6": ["Wireless Communication", "Embedded Systems", "IoT"],
+        "Sem 7": ["Antenna", "Elective"],
+        "Sem 8": ["Project", "Internship"],
+    },
+    "CSE - Computer Science": {
+        "Sem 1": ["Communicative English", "Calculus and Linear Algebra", "Physics", "Chemistry", "Programming for Problem Solving", "Engineering Graphics"],
+        "Sem 2": ["Advanced Calculus", "Data Structures", "Digital Logic", "Python"],
+        "Sem 3": ["DSA", "DBMS", "OS", "Computer Architecture"],
+        "Sem 4": ["CN", "Java", "Theory of Computation"],
+        "Sem 5": ["ML", "Web Development", "Compiler Design"],
+        "Sem 6": ["Cloud", "Cyber Security", "Project"],
+        "Sem 7": ["Deep Learning", "Elective"],
+        "Sem 8": ["Project", "Internship"],
+    },
+    "CSE (AI & ML) - Artificial Intelligence": {
+        "Sem 1": ["Communicative English", "Calculus and Linear Algebra", "Physics", "Chemistry", "Programming"],
+        "Sem 2": ["Advanced Calculus", "Python", "Data Structures"],
+        "Sem 3": ["DSA", "DBMS", "AI Basics", "Statistics"],
+        "Sem 4": ["Machine Learning", "OS", "CN"],
+        "Sem 5": ["Deep Learning", "NLP", "Computer Vision"],
+        "Sem 6": ["Generative AI", "Robotics"],
+        "Sem 7": ["Elective"],
+        "Sem 8": ["Project", "Internship"],
+    },
+    "CSE (Cyber Security)": {
+        "Sem 1": ["Communicative English", "Calculus", "Physics", "Chemistry", "Programming"],
+        "Sem 2": ["Advanced Calculus", "Python", "DSA"],
+        "Sem 3": ["DSA", "DBMS", "Computer Networks"],
+        "Sem 4": ["Cryptography", "Ethical Hacking Basics", "OS"],
+        "Sem 5": ["Cyber Security", "Web Security"],
+        "Sem 6": ["Penetration Testing", "Cloud Security"],
+        "Sem 7": ["Forensics"],
+        "Sem 8": ["Project", "Internship"],
+    },
+    "CSE (Data Science)": {
+        "Sem 1": ["Communicative English", "Calculus", "Physics", "Chemistry", "Programming"],
+        "Sem 2": ["Advanced Calculus", "Python", "Statistics"],
+        "Sem 3": ["DSA", "DBMS", "Probability"],
+        "Sem 4": ["Machine Learning", "Data Visualization"],
+        "Sem 5": ["Big Data", "Deep Learning"],
+        "Sem 6": ["Cloud", "AI"],
+        "Sem 7": ["Elective"],
+        "Sem 8": ["Project", "Internship"],
+    },
+    "IT - Information Technology": {
+        "Sem 1": ["Communicative English", "Calculus", "Physics", "Chemistry", "Programming"],
+        "Sem 2": ["Advanced Calculus", "Python", "DSA"],
+        "Sem 3": ["DSA", "DBMS", "OS"],
+        "Sem 4": ["CN", "Web Dev", "Java"],
+        "Sem 5": ["Cloud", "Cyber Security"],
+        "Sem 6": ["DevOps", "Project"],
+        "Sem 7": ["Elective"],
+        "Sem 8": ["Project", "Internship"],
+    },
+    "EEE - Electrical & Electronics": {
+        "Sem 1": ["Communicative English", "Calculus", "Physics", "Chemistry", "Engineering Graphics"],
+        "Sem 2": ["Advanced Calculus", "Basic Electrical", "Programming"],
+        "Sem 3": ["Circuit Theory", "Electrical Machines 1", "Electronic Devices"],
+        "Sem 4": ["Power Systems", "Control Systems", "Electrical Machines 2"],
+        "Sem 5": ["Power Electronics", "Renewable Energy"],
+        "Sem 6": ["Smart Grid", "Electric Vehicles"],
+        "Sem 7": ["Elective"],
+        "Sem 8": ["Project", "Internship"],
+    },
+    "Mech - Mechanical": {
+        "Sem 1": ["Communicative English", "Calculus", "Physics", "Chemistry", "Engineering Graphics"],
+        "Sem 2": ["Advanced Calculus", "Engineering Mechanics", "Programming"],
+        "Sem 3": ["Thermodynamics", "Fluid Mechanics", "Manufacturing"],
+        "Sem 4": ["Machine Design", "Heat Transfer", "Robotics"],
+        "Sem 5": ["CAD/CAM", "Automobile Engineering"],
+        "Sem 6": ["Robotics", "Industrial Engineering"],
+        "Sem 7": ["Elective"],
+        "Sem 8": ["Project", "Internship"],
+    },
+    "Civil - Civil": {
+        "Sem 1": ["Communicative English", "Calculus", "Physics", "Chemistry", "Engineering Graphics"],
+        "Sem 2": ["Advanced Calculus", "Surveying", "Mechanics"],
+        "Sem 3": ["Structural Engineering", "Geotechnical", "Concrete Technology"],
+        "Sem 4": ["Transportation", "Water Resources"],
+        "Sem 5": ["Design of Structures", "Estimation"],
+        "Sem 6": ["Construction Management"],
+        "Sem 7": ["Elective"],
+        "Sem 8": ["Project", "Internship"],
+    },
+    "Biotech - Biotechnology": {
+        "Sem 1": ["Communicative English", "Calculus", "Physics", "Chemistry", "Biology"],
+        "Sem 2": ["Biochemistry", "Microbiology", "Genetics"],
+        "Sem 3": ["Cell Biology", "Bioprocess Engineering"],
+        "Sem 4": ["Genetic Engineering", "Bioinformatics"],
+        "Sem 5": ["Industrial Biotechnology"],
+        "Sem 6": ["Pharmaceutical Biotechnology"],
+        "Sem 7": ["Elective"],
+        "Sem 8": ["Project", "Internship"],
+    },
+    "AIDS - AI & Data Science": {
+        "Sem 1": ["Communicative English", "Calculus", "Physics", "Chemistry", "Programming"],
+        "Sem 2": ["Advanced Calculus", "Python", "Statistics"],
+        "Sem 3": ["DSA", "DBMS", "AI Basics"],
+        "Sem 4": ["Machine Learning", "Data Visualization"],
+        "Sem 5": ["Deep Learning", "Big Data"],
+        "Sem 6": ["NLP", "Cloud"],
+        "Sem 7": ["Elective"],
+        "Sem 8": ["Project", "Internship"],
+    },
 }
-subject = st.selectbox("Subject", all_subjects[branch])
 
-tab1, tab2, tab3 = st.tabs(["🤖 AI Teacher", "💼 Placement", "📅 Sem Exam Timetable"])
+# Show Curriculum
+st.write("---")
+st.subheader(f"📚 SRM Curriculum - {branch} | {year} | {sem} | 2026 Regulation")
+subjects_list = all_branch_subjects.get(branch, {}).get(sem, ["Subject Update Panrom"])
+for s in subjects_list:
+    st.write(f"- **{s}**")
+
+st.subheader("✏️ Subject Thappa Irundha Inga Maathu Da!")
+custom = st.text_area("Un Actual Subjects-a Type Pannu (Oru Line-ku Oru Subject):", value="\n".join(subjects_list))
+my_subjects = [x for x in custom.split("\n") if x.strip()!=""]
+subject = st.selectbox("Padikka Subject Select Pannu", my_subjects)
+
+tab1, tab2, tab3 = st.tabs(["🤖 AI Teacher", "💼 Placement", "📅 Timetable"])
 
 with tab1:
-    st.subheader(f"👨‍🏫 {branch} AI Teacher")
-    doubt = st.text_input("Doubt Type Pannu - Ex: What is ECG? What is Python?")
+    st.subheader(f"👨‍🏫 {branch} AI Teacher - {subject}")
+    doubt = st.text_input("Doubt Type Pannu")
     def ai_answer(q):
         q=q.lower()
-        if "ecg" in q: return "**ECG - BME!** Heart Beat-a Graph-a Kaattum. PQRST: P=Atria, QRS=Ventricle, T=Rest."
-        if "mri" in q: return "**MRI - BME!** Magnet Use Panni Image. Radiation Illa!"
-        if "python" in q: return "**Python!** Easy Language. print('Hello SRM')"
-        if "dsa" in q: return "**DSA!** Stack=Plates (LIFO), Queue=Bus Queue (FIFO)."
-        if "vlsi" in q: return "**VLSI - ECE!** Periya Circuit-a Chinna Chip-la Poduradhu."
-        if "teach" in q or "tir" in q: return "**Dei SRM Tharun! Naan Irukken! 🔥**"
-        return f"**Super Doubt!** {q} - {subject} la Important. Definition + Diagram + Example-nu Padichu Paaru!"
+        if "eceds" in q or "ece data" in q: return "**ECEDS-na Enna?**\n\nECE + Data Science! Circuit-um Theriyum, Data Science-um Theriyum. 2-in-1 Branch! ECE Job + IT Job Rendum Apply Panna Mudiyum! SRM Trichy-la Semma Demand!"
+        if "vlsi" in q: return "**VLSI - ECE/ECEDS!** Periya Circuit-a Chinna Chip-la Poduradhu. Mobile Chip Ellam VLSI."
+        if "embedded" in q or "microcontroller" in q: return "**Embedded - ECE!** Hardware + Software. Arduino, Washing Machine Example."
+        if "data science" in q: return "**Data Science - ECEDS/CSE!** Data-va Vachu Future-a Predict Panradhu. Python + ML + SQL. Example: Amazon Unakku Pudicha Product Kaatturadhu Data Science!"
+        if "machine learning" in q or " ml " in q: return "**ML!** Computer-ku Data Kuduthu Thanaave Kathukka Vekkuradhu."
+        if "sensor" in q: return "**Biomedical Sensors - BME!** Body Signal-a Pidikkura Device. ECG Electrode, Pulse Oximeter."
+        if "ecg" in q: return "**ECG - BME!** Heart Beat Graph. PQRST."
+        if "python" in q: return "**Python!** print('Hello SRM') - ECEDS / CSE-ku Main Language!"
+        if "dsa" in q: return "**DSA!** Stack=Plates (LIFO), Queue=Bus Queue (FIFO). Placement-ku Mukkiyam!"
+        if "dbms" in q: return "**DBMS!** Data-va Store Panna System. SQL Use Panrom."
+        if "calculus" in q: return "**Calculus!** Differentiation = Rate of Change, Integration = Area."
+        if "teach" in q or "tir" in q: return "**Dei SRM Tharun! Naan Irukken! 🔥 All Branches + ECEDS-kkum Naan Dhaan Teacher!**"
+        return f"**Super Doubt!** {q} - {subject} la Important. Definition + Diagram + Real Life Example-nu Padichu Paaru Da!"
     if st.button("AI Teacher Kitta Kelu 🤖"):
-        if doubt: st.success("AI Teacher Badil:"); st.write(ai_answer(doubt))
+        if doubt: st.success("Badil:"); st.write(ai_answer(doubt))
         else: st.warning("Doubt Type Pannu Da!")
+    c1,c2,c3,c4 = st.columns(4)
+    if c1.button("ECEDS?"): st.write(ai_answer("eceds"))
+    if c2.button("Python"): st.write(ai_answer("python"))
+    if c3.button("VLSI"): st.write(ai_answer("vlsi"))
+    if c4.button("Data Science"): st.write(ai_answer("data science"))
 
 with tab2:
     st.subheader(f"💼 {branch} Placement - SRM Trichy")
-    placement_data = {
-        "BME - Biomedical": {"companies": "Philips, Siemens Healthineers, GE Healthcare, Apollo", "package": "3.5 - 8 LPA", "skills": "Biomedical Instrumentation, Hospital Training, Python"},
-        "CSE - Computer Science": {"companies": "TCS, Infosys, Wipro, Zoho, Amazon", "package": "4 - 12 LPA", "skills": "DSA, Python/Java, DBMS, OS, CN"},
-        "IT - Information Technology": {"companies": "TCS, Infosys, HCL, Capgemini", "package": "4 - 10 LPA", "skills": "Web Dev, Cloud, DBMS, Python"},
-        "ECE - Electronics": {"companies": "TCS, Qualcomm, Intel, Bosch", "package": "4 - 10 LPA", "skills": "VLSI, Embedded C, Digital Electronics"},
-        "EEE - Electrical": {"companies": "L&T, Siemens, ABB", "package": "3.5 - 8 LPA", "skills": "Power Systems, Machines, MATLAB"},
-        "Mech - Mechanical": {"companies": "L&T, TVS, Ashok Leyland, Hyundai", "package": "3.5 - 7 LPA", "skills": "CAD, Thermodynamics, Manufacturing"},
-        "Civil - Civil": {"companies": "L&T, Shapoorji, Sobha", "package": "3.5 - 6.5 LPA", "skills": "AutoCAD, STAAD Pro, Surveying"},
-        "AIDS - AI & Data Science": {"companies": "Zoho, Freshworks, Fractal", "package": "5 - 12 LPA", "skills": "Python, ML, SQL, Power BI"},
-        "CYS - Cyber Security": {"companies": "TCS, Wipro, Palo Alto", "package": "4 - 10 LPA", "skills": "Ethical Hacking, Networks, Linux"}
+    placement = {
+        "ECEDS - ECE (Data Science) ⭐ NEW": ("Qualcomm, Intel, TCS, Infosys, Zoho, Fractal, Mu Sigma, Bosch", "4.5 - 12 LPA", "VLSI + Embedded + Python + ML + SQL + DSA", "Embedded Engineer, Data Scientist, VLSI Engineer, ML Engineer"),
+        "BME - Biomedical": ("Philips, Siemens Healthineers, GE Healthcare, Apollo", "3.5 - 8 LPA", "Biomedical Instrumentation, Hospital Training, Python", "Biomedical Engineer, Service Engineer"),
+        "CSE - Computer Science": ("TCS, Infosys, Zoho, Amazon", "4 - 12 LPA", "DSA, Python/Java, DBMS, OS, CN", "SDE, Full Stack"),
+        "ECE - Electronics & Communication": ("Qualcomm, Intel, Bosch, TCS", "4 - 10 LPA", "VLSI, Embedded, Digital", "Embedded Engineer, VLSI Engineer"),
     }
-    d = placement_data[branch]
-    st.success(f"**Companies:** {d['companies']}")
-    st.info(f"**Package:** {d['package']}")
-    st.warning(f"**Skills:** {d['skills']}")
+    comp, pack, skills, roles = placement.get(branch, ("TCS, Infosys, Wipro, L&T, Accenture", "4 - 10 LPA", "Core + Python + Communication", "Engineer, Analyst"))
+    st.success(f"**Companies:** {comp}")
+    st.info(f"**Package:** {pack}")
+    st.warning(f"**Skills:** {skills}")
+    st.write(f"**Roles:** {roles}")
     cgpa = st.slider("Un CGPA?", 5.0, 10.0, 7.5)
-    if cgpa >= 7.5: st.success(f"CGPA {cgpa} - Super! 90% Company-ku Eligible!")
+    if cgpa >= 7.5: st.success(f"CGPA {cgpa} - Super! Eligible!")
     else: st.warning(f"CGPA {cgpa} - Konjam Yethu Da!")
+    if "ECEDS" in branch:
+        st.success("**ECEDS Advantage 🔥:** ECE Company-kkum Apply Panna Mudiyum, IT / Data Science Company-kkum Apply Panna Mudiyum! 2X Opportunity!")
 
 with tab3:
-    st.subheader("📅 Sem Exam Timetable - SRM Trichy")
-    st.write(f"Branch: **{branch}** | Year: **{year}**")
-
-    st.write("### 🗓️ 1. Exam Date Select Pannu")
-    exam_date = st.date_input("Sem Exam Start Date Eppo?", date.today() + timedelta(days=20))
-    today = date.today()
-    days_left = (exam_date - today).days
-    if days_left > 0:
-        st.success(f"🔥 Exam-ku Innum **{days_left} Naal** Dhaan Irukku Da! Time Waste Panna Koodadhu!")
-    elif days_left == 0:
-        st.error("DEI! INNIKKU EXAM-A! All The Best! 🔥")
-    else:
-        st.info("Exam Mudinjiducha? Next Sem-kku Prepare Pannu Da!")
-
-    st.write("### 📚 2. Un Subjects (SRM Sem Exam)")
-    subs = all_subjects[branch]
-    st.write("Un Sem Subjects:")
-    for i, s in enumerate(subs, 1):
-        st.write(f"**{i}. {s}**")
-
-    st.write("### ⏰ 3. Daily Study Timetable - Auto Generate!")
-    hours = st.slider("Oru Naal-ku Evlo Mani Neram Padippa?", 2, 10, 5)
-    st.write(f"**Un Daily Plan - {hours} Mani Neram:**")
-
-    if hours >= 6:
-        st.table({"Time": ["6:00 - 7:30 AM", "9:00 - 11:00 AM", "11:30 - 1:00 PM", "2:00 - 4:00 PM", "6:00 - 8:00 PM", "9:00 - 10:00 PM"], "What To Do": ["Revision - Yesterday Padichadhu", f"{subs[0]} - Theory + Diagram", f"{subs[1]} - Important Questions", f"{subs[2]} - Problems / Numericals", f"{subs[3] if len(subs)>3 else subs[0]} - Previous Year Paper", "Full Revision + Notes Ezhu"]})
-    elif hours >= 4:
-        st.table({"Time": ["6:30 - 8:00 AM", "10:00 - 12:00 PM", "2:00 - 4:00 PM", "7:00 - 9:00 PM"], "What To Do": [f"{subs[0]} - Theory", f"{subs[1]} - Important Qns", f"{subs[2]} - Problems", "Revision + Mock Test"]})
-    else:
-        st.table({"Time": ["7:00 - 8:30 AM", "6:00 - 8:00 PM"], "What To Do": [f"{subs[0]} - Most Important Topic", "Revision + Previous Paper"]})
-
-    st.write("### 📋 4. Exam Week Timetable - SRM Pattern")
-    st.write("SRM-la Exam-ku Naduvula 1-2 Days Gap Varum. Adha Epdi Use Pannanum:")
-    st.table({
-        "Day": ["Exam-ku 3 Naal Munnadi", "Exam-ku 2 Naal Munnadi", "Exam-ku 1 Naal Munnadi", "Exam Day Morning"],
-        "Seiya Vendum": ["Full Syllabus 1 Time Mudichidu", "Important 5 Units + Diagram Practice", "Previous Year Paper + Short Notes Mattum", "6 AM Elundhirichu Formula + Diagram Mattum Paaru"]
-    })
-
-    st.write("### 🎯 5. Subject-wise Study Plan")
-    if days_left > 0:
-        per_sub = max(1, days_left // len(subs))
-        st.info(f"**Plan:** Oru Subject-kku **{per_sub} Naal** Kuduthu Mudichidu. Last 3 Naal Full Revision Mattum!")
-        for i, s in enumerate(subs):
-            start = today + timedelta(days=i*per_sub)
-            st.write(f"**{s}** - {start.strftime('%d %b')} - { (start + timedelta(days=per_sub-1)).strftime('%d %b')} - {per_sub} Naal")
-
-    st.write("### ✅ 6. SRM Exam Tips - Topper Tips!")
-    st.success("""
-    **1.** SRM Question Paper-la 2 Mark, 10 Mark, 16 Mark Pattern - 16 Mark-ku Diagram Kandippa Podu!
-    **2.** Lab Record + Assignment-a Mudichidu - Internal Marks-la Dhaan Pass Easy!
-    **3.** Previous 3 Year Paper-a Kandippa Paaru - 40% Questions Adhula irundhu Varum!
-    **4.** Night Full-a Muzhichitu Padikkadha - 6 Mani Thoongu, Brain Fresh-a Irukkum!
-    **5.** Phone-a 1 Mani Neram Side-la Vechidu - Focus Pannu Da!
-    """)
-
-    st.write("### ⏳ 7. Exam Countdown - Daily Motivation")
-    if st.button("Enakku Motivation Kudunga! 🔥"):
+    st.subheader(f"📅 Timetable - {branch} | {sem}")
+    exam_date = st.date_input("Sem Exam Start Date?", date.today() + timedelta(days=20))
+    days_left = (exam_date - date.today()).days
+    st.success(f"Exam-ku Innum {days_left} Naal Irukku Da! 🔥")
+    st.write("**Un Subjects:**")
+    for s in my_subjects: st.write(f"- {s}")
+    hours = st.slider("Oru Naal Evlo Mani Padippa?", 2, 10, 5)
+    st.write(f"**Daily Plan - {hours} Mani:** Core Subject 2 Hr + Problem Practice 1 Hr + Revision 1 Hr + Previous Paper 1 Hr")
+    if st.button("Motivation Kudunga! 🔥"):
         st.balloons()
-        st.write(f"**Dei Tharun! {days_left} Naal Dhaan Irukku! Nee Panna Mudiyum! SRM Trichy-la Topper Aaganum-na Ippo Dhaan Time! Padichu Mudichidu Da! 💪🔥**")
+        st.write(f"**Dei Tharun! {days_left} Naal Dhaan! {branch}-la Topper Nee Dhaan! 💪**")
 
 st.write("---")
-st.write("Made by Tharun | SRM IST Trichy - ALL BRANCHES + PLACEMENT + TIMETABLE 🔥")
+st.write("Made by Tharun | SRM IST Trichy - ALL BRANCHES + ECEDS | 2026 Regulation 🔥")

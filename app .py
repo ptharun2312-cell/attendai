@@ -3,7 +3,7 @@ from datetime import date, timedelta
 import math
 
 st.set_page_config(page_title="SRM Trichy - Materials Upload", page_icon="🏫")
-st.title("🏫 SRM IST - Trichy Campus")
+st.title("🏫 TOPPER MAKER SRM APP")
 st.subheader("💼 Placement + 📅 Timetable + ✅ Attendance + 🎓 CGPA + 🚨 Detention + 📚 Materials")
 st.write("ALL BRANCHES | 2026 Regulation | SRM Trichy")
 

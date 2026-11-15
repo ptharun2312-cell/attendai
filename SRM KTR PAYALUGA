@@ -27,7 +27,7 @@ sem = st.selectbox("Semester", ["Sem 1", "Sem 2", "Sem 3", "Sem 4", "Sem 5", "Se
 
 all_branch_subjects = {
     "BME - Biomedical": {
-        "Sem 1": ["Communicative English", "Calculus and Linear Algebra", "Physics: Electromagnetic Theory, Quantum, Waves & Optics", "Chemistry", "Biomedical Sensors", "Engineering Graphics and Design", "Philosophy of Engineering", "Professional Skills"],
+        "Sem 1": ["Professional english for engineers", "Calculus and Linear Algebra", "Physics: Electromagnetic Theory, Quantum, Waves & Optics", "Chemistry", "Electrical and electronics engineering", "Engineering Graphics ", "data science and artificial intelligence of Engineering", "Professional Skills"],
         "Sem 2": ["Advanced Calculus", "Human Anatomy and Physiology", "Biology for Engineers", "Programming in Python", "Electrical & Electronics Engineering", "Environmental Science"],
         "Sem 3": ["Biomedical Instrumentation", "Biomechanics", "Biomaterials", "Probability & Statistics"],
         "Sem 4": ["Medical Electronics", "Biomedical Signals & Systems", "Biocontrol Systems"],

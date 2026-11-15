@@ -1,4 +1,47 @@
 import streamlit as st
+import streamlit as st
+from datetime import date, timedelta
+import math
+
+# --- TOPPER MAKER - LOGIN 🔐 ---
+if "logged_in" not in st.session_state:
+    st.session_state.logged_in = False
+
+if not st.session_state.logged_in:
+    st.title("🏆 TOPPER MAKER")
+    st.subheader("SRM IST | Trichy + KTR Payalugs 🔥")
+    st.write("---")
+    st.write("### 🔐 Sign In Pannu Da!")
+    st.write("SRM Students Mattum Ulla Poga Mudiyum!")
+
+    name = st.text_input("👤 Un Peru Enna?")
+    roll = st.text_input("🆔 Roll No / Register No - Ex: RA2311000000000")
+    campus_login = st.selectbox("🏫 Campus", ["Trichy Campus", "KTR Campus - Chennai 🔥", "Ramapuram", "Vadapalani", "Delhi NCR", "Amaravati"])
+    password = st.text_input("🔑 Password - Edhuvum Vechuko (Ex: topper123)", type="password")
+
+    if st.button("🚀 LOGIN - TOPPER MAKER Ulla Po!"):
+        if name and roll and password:
+            st.session_state.logged_in = True
+            st.session_state.user_name = name
+            st.session_state.user_roll = roll
+            st.session_state.user_campus = campus_login
+            st.success(f"Vanakkam {name}! 🔥 Login Success!")
+            st.rerun()
+        else:
+            st.error("Dei! Peru, Roll No, Password Ellam Fill Pannu Da!")
+
+    st.write("---")
+    st.write("🏆 TOPPER MAKER | Made by Tharun | SRM Trichy + KTR")
+    st.stop()
+
+# LOGIN AANA APRAM MATTUM KEELA IRUKKURA APP THERIYUM
+st.success(f"👋 Vanakkam {st.session_state.user_name}! | {st.session_state.user_roll} | {st.session_state.user_campus}")
+if st.button("🚪 Logout"):
+    st.session_state.logged_in = False
+    st.rerun()
+
+st.write("---")
+# --- APP STARTS HERE ---
 from datetime import date, timedelta
 import math
 

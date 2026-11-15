@@ -1,9 +1,10 @@
 import streamlit as st
 from datetime import date, timedelta
+import math
 
-st.set_page_config(page_title="SRM Trichy - Placement + Timetable", page_icon="🏫")
+st.set_page_config(page_title="SRM Trichy - Materials Upload", page_icon="🏫")
 st.title("🏫 SRM IST - Trichy Campus")
-st.subheader("💼 Placement + 📅 Sem Exam Timetable")
+st.subheader("💼 Placement + 📅 Timetable + ✅ Attendance + 🎓 CGPA + 🚨 Detention + 📚 Materials")
 st.write("ALL BRANCHES | 2026 Regulation | SRM Trichy")
 
 branch = st.selectbox("Branch Select Pannu", [
@@ -21,7 +22,6 @@ branch = st.selectbox("Branch Select Pannu", [
     "Biotech - Biotechnology",
     "AIDS - AI & Data Science"
 ])
-
 year = st.selectbox("Year", ["1st Year", "2nd Year", "3rd Year", "4th Year"])
 sem = st.selectbox("Semester", ["Sem 1", "Sem 2", "Sem 3", "Sem 4", "Sem 5", "Sem 6", "Sem 7", "Sem 8"])
 
@@ -161,15 +161,12 @@ all_branch_subjects = {
 st.write("---")
 st.subheader(f"📚 SRM Curriculum - {branch} | {year} | {sem} | 2026 Regulation")
 subjects_list = all_branch_subjects.get(branch, {}).get(sem, ["Subject Update Panrom"])
-for s in subjects_list:
-    st.write(f"- **{s}**")
-
+for s in subjects_list: st.write(f"- **{s}**")
 st.subheader("✏️ Subject Thappa Irundha Inga Maathu Da!")
 custom = st.text_area("Un Actual Subjects-a Type Pannu (Oru Line-ku Oru Subject):", value="\n".join(subjects_list))
 my_subjects = [x for x in custom.split("\n") if x.strip()!=""]
 
-# --- ONLY 2 TABS NOW ---
-tab1, tab2 = st.tabs(["💼 Placement", "📅 Sem Exam Timetable"])
+tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["💼 Placement", "📅 Timetable", "✅ Attendance", "🎓 CGPA / GPA", "🚨 Detention", "📚 Materials Upload"])
 
 with tab1:
     st.subheader(f"💼 {branch} Placement - SRM Trichy")
@@ -187,95 +184,216 @@ with tab1:
         "CSE (Cyber Security)": ("TCS, Wipro, Palo Alto, Quick Heal", "4 - 10 LPA", "Ethical Hacking, Networks, Linux", "Security Analyst, Pentester"),
     }
     comp, pack, skills, roles = placement.get(branch, ("TCS, Infosys, Wipro, Accenture", "4 - 10 LPA", "Core + Python + Communication", "Engineer, Analyst"))
-    st.success(f"**Top Companies:** {comp}")
-    st.info(f"**Average Package:** {pack}")
-    st.warning(f"**Skills Venam:** {skills}")
-    st.write(f"**Job Roles:** {roles}")
-
-    st.write("---")
-    st.subheader("📊 CGPA Calculator - Placement Eligibility")
-    cgpa = st.slider("Un CGPA Enna?", 5.0, 10.0, 7.5)
-    if cgpa >= 8.5:
-        st.success(f"CGPA {cgpa} - SEMMA DA! 🔥 Ellam Company-ku Eligible! Top Package-kku Try Pannu!")
-    elif cgpa >= 7.5:
-        st.success(f"CGPA {cgpa} - Super! 👍 90% Company-ku Eligible!")
-    elif cgpa >= 6.5:
-        st.warning(f"CGPA {cgpa} - Okay Da. 60% Company-ku Eligible. CGPA-a 7.5-ku Kondu Po!")
-    else:
-        st.error(f"CGPA {cgpa} - Konjam Kastam Da. Ippo irundhu Padichu CGPA-a Yethu!")
-
-    st.write("---")
-    st.subheader("📝 Resume Tips")
-    st.write("**1.** 1 Page Resume - Photo, CGPA, Skills, Project, Internship Podu\n**2.** Project: 2 Project Kandippa Irukkanum - GitHub Link Podu\n**3.** Internship: 3rd Year-la Pannu\n**4.** LinkedIn Profile Create Pannu - SRM Trichy-nu Podu")
-
-    st.subheader("❓ Interview Questions - Top 5")
-    if "ECEDS" in branch:
-        st.write("1. Tell me about yourself?\n2. What is VLSI? What is Embedded?\n3. Python-la Data Analysis Epdi Panuva?\n4. Microcontroller vs Microprocessor?\n5. Un Project-a Explain Pannu?")
-    elif "BME" in branch:
-        st.write("1. Tell me about yourself?\n2. What is ECG? PQRST Explain Pannu?\n3. MRI vs CT Difference?\n4. Pacemaker Epdi Work Aagudhu?\n5. Hospital Internship-la Enna Panna?")
-    elif "CSE" in branch or "AIDS" in branch or "IT" in branch:
-        st.write("1. Tell me about yourself?\n2. What is OOPs?\n3. Reverse a String Code Ezhu\n4. SQL vs NoSQL Difference?\n5. Un Project-a Explain Pannu?")
-    elif "ECE" in branch:
-        st.write("1. Tell me about yourself?\n2. What is VLSI?\n3. Microcontroller vs Microprocessor?\n4. Embedded C-la Code Ezhu\n5. Un Project Explain Pannu?")
-    else:
-        st.write("1. Tell me about yourself?\n2. Un Branch Basics?\n3. Project Explain Pannu?\n4. Why This Company?\n5. Where Do You See in 5 Years?")
-
-    st.subheader("📅 Placement Timeline - SRM Trichy")
-    st.write("**1st Year:** Basics + Python + CGPA-a Yethu\n**2nd Year:** Core Subjects + 1 Project + LinkedIn\n**3rd Year:** Internship + DSA / Core Strong + Resume Ready\n**4th Year:** Placement Drive - Aptitude + Interview + Offer Letter! 🎉")
-    if "ECEDS" in branch:
-        st.success("**ECEDS Advantage 🔥:** ECE Company-kkum Apply Panna Mudiyum, IT / Data Science Company-kkum Apply Panna Mudiyum! 2X Opportunity!")
+    st.success(f"**Top Companies:** {comp}"); st.info(f"**Average Package:** {pack}"); st.warning(f"**Skills Venam:** {skills}"); st.write(f"**Job Roles:** {roles}")
+    cg = st.slider("Un CGPA Enna?", 5.0, 10.0, 7.5)
+    if cg >= 8.5: st.success(f"CGPA {cg} - SEMMA DA! 🔥")
+    elif cg >= 7.5: st.success(f"CGPA {cg} - Super! 👍")
+    else: st.warning(f"CGPA {cg} - Yethu Da!")
 
 with tab2:
     st.subheader(f"📅 Sem Exam Timetable - {branch} | {year} {sem}")
     exam_date = st.date_input("Sem Exam Start Date Eppo?", date.today() + timedelta(days=20))
     days_left = (exam_date - date.today()).days
-    if days_left > 0:
-        st.success(f"🔥 Exam-ku Innum **{days_left} Naal** Dhaan Irukku Da! Time Waste Panna Koodadhu!")
-    elif days_left == 0:
-        st.error("DEI! INNIKKU EXAM-A! All The Best! 🔥")
-    else:
-        st.info("Exam Mudinjiducha? Next Sem-kku Prepare Pannu Da!")
-
-    st.write("### 📚 Un Subjects (SRM 2026 Regulation)")
-    for i, s in enumerate(my_subjects, 1):
-        st.write(f"**{i}. {s}**")
-
-    st.write("### ⏰ Daily Study Timetable")
+    if days_left > 0: st.success(f"🔥 Exam-ku Innum **{days_left} Naal** Dhaan Irukku Da!")
+    elif days_left == 0: st.error("DEI! INNIKKU EXAM-A! All The Best! 🔥")
+    else: st.info("Exam Mudinjiducha? Next Sem-kku Prepare Pannu Da!")
+    st.write("### 📚 Un Subjects")
+    for i, s in enumerate(my_subjects, 1): st.write(f"**{i}. {s}**")
     hours = st.slider("Oru Naal-ku Evlo Mani Neram Padippa?", 2, 10, 5)
-    st.write(f"**Un Daily Plan - {hours} Mani Neram:**")
-    if hours >= 6:
-        st.table({"Time": ["6:00 - 7:30 AM", "9:00 - 11:00 AM", "11:30 - 1:00 PM", "2:00 - 4:00 PM", "6:00 - 8:00 PM", "9:00 - 10:00 PM"], "What To Do": ["Revision - Yesterday Padichadhu", f"{my_subjects[0] if len(my_subjects)>0 else ''} - Theory + Diagram", f"{my_subjects[1] if len(my_subjects)>1 else ''} - Important Questions", f"{my_subjects[2] if len(my_subjects)>2 else ''} - Problems", f"{my_subjects[3] if len(my_subjects)>3 else ''} - Previous Paper", "Full Revision + Notes"]})
-    elif hours >= 4:
-        st.table({"Time": ["6:30 - 8:00 AM", "10:00 - 12:00 PM", "2:00 - 4:00 PM", "7:00 - 9:00 PM"], "What To Do": [f"{my_subjects[0] if len(my_subjects)>0 else ''} - Theory", f"{my_subjects[1] if len(my_subjects)>1 else ''} - Important Qns", f"{my_subjects[2] if len(my_subjects)>2 else ''} - Problems", "Revision + Mock Test"]})
-    else:
-        st.table({"Time": ["7:00 - 8:30 AM", "6:00 - 8:00 PM"], "What To Do": [f"{my_subjects[0] if len(my_subjects)>0 else ''} - Most Important Topic", "Revision + Previous Paper"]})
+    st.write(f"**Daily Plan - {hours} Mani:** Core 2 Hr + Problems 1 Hr + Revision 1 Hr + Previous Paper 1 Hr")
 
-    st.write("### 📋 Exam Week Plan - SRM Pattern")
-    st.table({
-        "Day": ["Exam-ku 3 Naal Munnadi", "Exam-ku 2 Naal Munnadi", "Exam-ku 1 Naal Munnadi", "Exam Day Morning"],
-        "Seiya Vendum": ["Full Syllabus 1 Time Mudichidu", "Important 5 Units + Diagram Practice", "Previous Year Paper + Short Notes Mattum", "6 AM Elundhirichu Formula + Diagram Mattum Paaru"]
-    })
+with tab3:
+    st.subheader(f"✅ Attendance Calculator - {branch} | {sem}")
+    st.write("SRM-la **75% Attendance Kandippa Venam!**")
+    total = st.number_input("Total Classes Nadandhadhu Evlo?", min_value=1, value=40, key="att_total")
+    attended = st.number_input("Nee Pona Classes Evlo?", min_value=0, max_value=int(total), value=30, key="att_attended")
+    target = st.slider("Target Attendance %", 60, 100, 75, key="att_target")
+    if total > 0:
+        perc = (attended / total) * 100
+        st.metric("Un Attendance %", f"{perc:.1f}%"); st.progress(min(1.0, perc/100))
+        if perc >= target:
+            st.success(f"✅ SAFE DA! {perc:.1f}% Irukku!")
+            can_bunk = int(attended*100/target - total)
+            if can_bunk > 0: st.info(f"😎 Innum **{can_bunk} Class Bunk** Adikalam!")
+        else:
+            st.error(f"⚠️ DANGER! {perc:.1f}% Dhaan Irukku!")
+            if target < 100:
+                need = math.ceil((target*total - 100*attended) / (100 - target))
+                st.warning(f"🔥 Inime **{need} Class Thodarnthu** Poganaum!")
 
-    st.write("### 🎯 Subject-wise Study Plan")
-    if days_left > 0 and len(my_subjects) > 0:
-        per_sub = max(1, days_left // len(my_subjects))
-        st.info(f"**Plan:** Oru Subject-kku **{per_sub} Naal** Kuduthu Mudichidu. Last 3 Naal Full Revision Mattum!")
-        for i, s in enumerate(my_subjects):
-            start = date.today() + timedelta(days=i*per_sub)
-            st.write(f"**{s}** - {start.strftime('%d %b')} - {(start + timedelta(days=per_sub-1)).strftime('%d %b')} - {per_sub} Naal")
+with tab4:
+    st.subheader("🎓 CGPA / GPA Calculator - SRM Trichy")
+    st.write("SRM Grade: **O=10, A+=9, A=8, B+=7, B=6, C=5, U=0**")
+    grade_map = {"O (90-100) - 10": 10, "A+ (80-89) - 9": 9, "A (70-79) - 8": 8, "B+ (60-69) - 7": 7, "B (50-59) - 6": 6, "C (45-49) - 5": 5, "U (Fail <45) - 0": 0}
+    st.subheader("📊 GPA Calculator - Indha Sem")
+    total_points = 0; total_credits = 0
+    default_credits = [3, 4, 5, 5, 3, 2, 2, 1]
+    for i, subj in enumerate(my_subjects):
+        c1, c2 = st.columns([3, 1])
+        with c1: g = st.selectbox(f"{i+1}. {subj} - Grade?", list(grade_map.keys()), index=2, key=f"grade_{i}")
+        with c2: cr = st.number_input("Credit", min_value=1, max_value=6, value=default_credits[i] if i < len(default_credits) else 3, key=f"credit_{i}")
+        total_points += grade_map[g] * cr; total_credits += cr
+    if total_credits > 0:
+        gpa = total_points / total_credits
+        st.metric(f"{sem} GPA", f"{gpa:.2f} / 10"); st.progress(min(1.0, gpa/10))
+        if gpa >= 9: st.success(f"🎉 GPA {gpa:.2f} - OUTSTANDING DA! 🔥")
+        elif gpa >= 7.5: st.success(f"👍 GPA {gpa:.2f} - VERY GOOD!")
+        elif gpa >= 6: st.warning(f"⚠️ GPA {gpa:.2f} - AVERAGE!")
+        else: st.error(f"🚨 GPA {gpa:.2f} - DANGER!")
+    st.write("---")
+    st.subheader("🎓 CGPA Calculator - Overall")
+    c1,c2,c3,c4 = st.columns(4)
+    with c1: s1 = st.number_input("Sem 1 GPA", 0.0, 10.0, 8.0, step=0.1)
+    with c2: s2 = st.number_input("Sem 2 GPA", 0.0, 10.0, 7.5, step=0.1)
+    with c3: s3 = st.number_input("Sem 3 GPA", 0.0, 10.0, 0.0, step=0.1)
+    with c4: s4 = st.number_input("Sem 4 GPA", 0.0, 10.0, 0.0, step=0.1)
+    c5,c6,c7,c8 = st.columns(4)
+    with c5: s5 = st.number_input("Sem 5 GPA", 0.0, 10.0, 0.0, step=0.1)
+    with c6: s6 = st.number_input("Sem 6 GPA", 0.0, 10.0, 0.0, step=0.1)
+    with c7: s7 = st.number_input("Sem 7 GPA", 0.0, 10.0, 0.0, step=0.1)
+    with c8: s8 = st.number_input("Sem 8 GPA", 0.0, 10.0, 0.0, step=0.1)
+    valid = [x for x in [s1,s2,s3,s4,s5,s6,s7,s8] if x>0]
+    if len(valid)>0:
+        cgpa_val = sum(valid)/len(valid)
+        st.metric(f"Un CGPA ({len(valid)} Sem)", f"{cgpa_val:.2f} / 10")
 
-    st.write("### ✅ SRM Exam Tips")
-    st.success("""
-    **1.** SRM Paper-la 2 Mark, 10 Mark, 16 Mark Pattern - 16 Mark-ku Diagram Kandippa Podu!
-    **2.** Lab Record + Assignment-a Mudichidu - Internal Marks-la Dhaan Pass Easy!
-    **3.** Previous 3 Year Paper-a Kandippa Paaru - 40% Questions Adhula irundhu Varum!
-    **4.** Night Full-a Muzhichitu Padikkadha - 6 Mani Thoongu!
-    **5.** Phone-a 1 Mani Neram Side-la Vechidu - Focus Pannu Da!
+with tab5:
+    st.subheader("🚨 Detention Calculator - SRM Trichy")
+    st.info("**SRM Rule:** 75%+ = Safe | 65-75% = Condonation | <65% = Detention!")
+    d_total = st.number_input("Total Classes - Sem Full-a Evlo?", min_value=1, value=80, key="det_total")
+    d_att = st.number_input("Nee Pona Classes Evlo?", min_value=0, max_value=int(d_total), value=55, key="det_att")
+    d_left = st.number_input("Inime Varapora Classes Evlo?", min_value=0, value=20, key="det_left")
+    if d_total>0:
+        d_perc = (d_att/d_total)*100
+        st.metric("Ippo Un Attendance %", f"{d_perc:.1f}%")
+        final_total = d_total + d_left
+        final_perc = ((d_att+d_left)/final_total)*100 if final_total>0 else 0
+        st.metric("Inime Full-a Pona Final %", f"{final_perc:.1f}%")
+        if d_perc >= 75: st.success(f"✅ SAFE DA! {d_perc:.1f}% - Detention Illa!")
+        elif d_perc >= 65: st.warning(f"⚠️ CONDONATION ZONE! {d_perc:.1f}% - Medical + Fee Venam!")
+        else: st.error(f"🚨 DETENTION RISK! {d_perc:.1f}% - 65%-kku Keela!")
+
+with tab6:
+    st.subheader(f"📚 Materials Upload - {branch} | {year} | {sem}")
+    st.write("Notes, PDF, Previous Paper, Lab Record Ellam Inga Upload Pannu! Friends-um Paakalaam!")
+    st.write("---")
+
+    # --- 1. UPLOAD SECTION ---
+    st.subheader("📤 1. Material Upload Pannu")
+    mat_subject = st.selectbox("Edha Subject-ku Material?", my_subjects, key="mat_subj")
+    mat_type = st.selectbox("Material Type Enna?", ["📝 Notes", "📄 Previous Year Paper", "📕 Question Bank", "🔬 Lab Record / Manual", "📊 Presentation (PPT)", "📖 Textbook / PDF", "📝 Assignment", "🎥 Video Link / YouTube"])
+    mat_title = st.text_input("Material Name Enna? Ex: Calculus Unit 1 Notes - Tharun", placeholder="Calculus Unit 1 Full Notes")
+    mat_uploader = st.text_input("Un Name? (Yaar Upload Panra?)", placeholder="Ex: Tharun - BME 1st Year")
+
+    uploaded_files = st.file_uploader(
+        "File-a Inga Podu Da! (PDF, Image, PPT, Word, Excel Ellam Upload Panna Mudiyum)",
+        type=["pdf", "docx", "pptx", "xlsx", "jpg", "jpeg", "png", "txt", "zip"],
+        accept_multiple_files=True,
+        key="mat_upload"
+    )
+
+    # Google Drive / YouTube Link Option
+    drive_link = st.text_input("Google Drive / YouTube Link Irundha Inga Podu (Optional)", placeholder="https://drive.google.com/... / https://youtube.com/...")
+
+    if st.button("📚 Material-a Upload Pannu! ✅"):
+        if mat_title or uploaded_files or drive_link:
+            st.success(f"✅ **{mat_title if mat_title else 'Material'}** Upload Aayiduchu Da! 🔥")
+            st.balloons()
+            st.write(f"**Subject:** {mat_subject}")
+            st.write(f"**Type:** {mat_type}")
+            st.write(f"**Uploaded By:** {mat_uploader if mat_uploader else 'SRM Student'}")
+            if drive_link: st.write(f"**Link:** {drive_link}")
+            if uploaded_files:
+                for f in uploaded_files: st.write(f"📄 File: {f.name} - {round(f.size/1024, 1)} KB")
+        else:
+            st.warning("Dei! Material Name-a Illa File-a Podu Da! Onnume Illama Upload Panna Mudiyadhu!")
+
+    if uploaded_files:
+        st.write("---")
+        st.subheader("👀 2. Nee Upload Panna Files - Ippo Paaru / Download Pannu")
+        for f in uploaded_files:
+            c1, c2 = st.columns([3, 1])
+            with c1:
+                st.write(f"📄 **{f.name}** - {mat_subject} - {mat_type}")
+                # Image-na Kaatu, PDF-na Download Button
+                if f.type in ["image/jpeg", "image/png", "image/jpg"]:
+                    st.image(f, width=300)
+                elif f.type == "application/pdf":
+                    st.write("📕 PDF File - Keela Download Button-la Download Pannu!")
+                elif f.type == "text/plain":
+                    st.text(f.read().decode("utf-8", errors="ignore")[:2000])
+                else:
+                    st.write(f"File Type: {f.type}")
+            with c2:
+                st.download_button(f"⬇️ Download {f.name}", data=f.getvalue(), file_name=f.name, mime=f.type, key=f"dl_{f.name}")
+
+    st.write("---")
+
+    # --- 2. SUBJECT WISE MATERIALS LIST (READY-MADE) ---
+    st.subheader("📂 3. Subject-wise Materials - Ready List")
+    st.write("SRM Trichy Students-ku Thevaiyana Materials - Click Panni Download Pannu / Link-a Open Pannu!")
+    # Filter by selected subject
+    show_subj = st.selectbox("Paakka Subject Select Pannu", ["All Subjects"] + my_subjects, key="show_mat_subj")
+
+    # Ready materials dict - SRM Common
+    ready_mats = [
+        ("Calculus and Linear Algebra", "📝", "Unit 1-5 Full Notes + Important Questions", "SRM Notes - Calculus PDF", "Calculus-la Matrices + ODE Mukkiyam!"),
+        ("Calculus and Linear Algebra", "📄", "Previous Year Papers - 2023, 2024, 2025", "SRM Previous Papers", "40% Questions Repeat Aagum!"),
+        ("Physics: Electromagnetic Theory, Quantum, Waves & Optics", "📝", "Laser + Fiber Optics Notes + Diagrams", "Physics Notes", "Diagram Podu - 10 Marks Confirm!"),
+        ("Chemistry", "📝", "Chemistry Full Notes + Lab Manual", "Chemistry Lab Manual", "Titration Experiment Steps Irukku!"),
+        ("Biomedical Sensors", "📝", "Sensors Notes - ECG, Pulse Oximeter", "BME Sensors Notes", "BME-kku Mattum Special!"),
+        ("Communicative English", "📝", "English - Presentation + GD Tips", "English Notes", "Placement-ku English Mukkiyam!"),
+        ("Programming in Python", "📝", "Python Notes + 50 Programs + Lab Record", "Python Programs", "Lab-la Code Run Panni Paaru!"),
+        ("Engineering Graphics and Design", "📝", "Drawing Sheets + CAD Basics", "Graphics Notes", "Scale Olunga Vechuko!"),
+    ]
+
+    for subj, emoji, title, fname, tip in ready_mats:
+        # Filter
+        if show_subj != "All Subjects" and subj not in show_subj and show_subj not in subj:
+            # Loose match: if show subject contains part of ready subj
+            if not any(w.lower() in subj.lower() for w in show_subj.split() if len(w)>3):
+                continue
+        with st.expander(f"{emoji} {subj} - {title}"):
+            st.write(f"**Material:** {title}")
+            st.write(f"**Tip:** {tip}")
+            st.write(f"**File:** {fname}")
+            # Dummy download - User can replace with real Drive link
+            st.write("**Link:** Google Drive-la Upload Panni Inga Link Podu Da! (Keela Text Box-la)")
+            if st.button(f"📥 Download - {title[:30]}", key=f"ready_{title[:20]}_{subj[:10]}"):
+                st.info("Dei! Ippo Dummy Link Dhaan! Un Real Notes-a Mela Upload Pannina, Adhu Inga Varum! Drive Link-a Inga Podu Da!")
+
+    st.write("---")
+
+    # --- 3. ADD DRIVE LINK - PERMANENT MATERIALS ---
+    st.subheader("🔗 4. Permanent Materials - Google Drive Link Add Pannu")
+    st.warning("⚠️ **Mukkiyam:** Mela Upload Panna File - App-a Close Panna Poidum! Permanent-a Irukkanumna Google Drive Link Dhaan Best!")
+    st.write("**Epdi Panna?**")
+    st.write("1. Notes-a Google Drive-la Upload Pannu\n2. Share -> Anyone with Link -> Copy Link\n3. Keela Paste Pannu - Ellarum Paakalaam!")
+    g_subject = st.selectbox("Drive Link Edha Subject-ku?", my_subjects, key="drive_subj")
+    g_title = st.text_input("Drive Material Name?", placeholder="Ex: BME Sem 1 Full Notes - All Subjects", key="drive_title")
+    g_link = st.text_input("Google Drive Link-a Inga Paste Pannu", placeholder="https://drive.google.com/file/d/...", key="drive_link_input")
+    g_name = st.text_input("Un Name?", placeholder="Ex: Tharun", key="drive_name")
+    if st.button("🔗 Drive Link-a Save Pannu!"):
+        if g_link and g_title:
+            st.success(f"✅ **{g_title}** Save Aayiduchu! Friends Ellam Paakalaam!")
+            st.write(f"**Subject:** {g_subject} | **By:** {g_name if g_name else 'SRM Student'}")
+            st.link_button(f"📂 Open Drive Material - {g_title}", g_link)
+        else:
+            st.warning("Title + Link Rendum Podu Da!")
+
+    st.write("---")
+    st.subheader("💡 Materials Tips - SRM Trichy")
+    st.info("""
+    **1. Notes:** Class Notes + Sir Kodutha PPT - Rendum Serthu Padichu Paaru!
+    **2. Previous Paper:** Last 3 Year Paper - 40% Questions Repeat Aagum!
+    **3. Lab Record:** Lab Record-a Exam-kku Munnadi Mudichidu - Internal Marks!
+    **4. Share Pannu:** Nee Notes Upload Panna, Friends-um Upload Pannuvanga - Ellarum Pass Aagalam!
+    **5. Drive Link:** Permanent-a Irukkanumna Drive Link Dhaan Best! File Upload Temporary Dhaan!
     """)
 
-    if st.button("Enakku Motivation Kudunga! 🔥"):
+    if st.button("Materials Upload Aayiduchu! 🔥"):
         st.balloons()
-        st.write(f"**Dei Tharun! {days_left} Naal Dhaan Irukku! Nee Panna Mudiyum! SRM Trichy-la Topper Aaganum-na Ippo Dhaan Time! Padichu Mudichidu Da! 💪🔥**")
+        st.write("**Dei Tharun! Notes Share Panna Dhaan Topper Aava Mudiyum! Nee Semma Da! 📚🔥**")
 
 st.write("---")
-st.write("Made by Tharun | SRM IST Trichy - Placement + Timetable | 2026 Regulation 🔥")
+st.write("Made by Tharun | SRM IST Trichy - Placement + Timetable + Attendance + CGPA + Detention + Materials | 2026 Regulation 🔥")

@@ -40,7 +40,23 @@ if not st.session_state.logged_in:
 
 # --- LOGIN AANA APRAM ---
 st.success(f"👋 Hello {st.session_state.user_name}! | {st.session_state.user_roll} | {st.session_state.user_mail} | {st.session_state.user_campus}")
-if st.button("🚪 Logout"):
+# --- BIG RED LOGOUT BUTTON 🔴 ---
+st.markdown("""
+<style>
+div.stButton > button:first-child {
+    background-color: #FF0000 !important;
+    color: white !important;
+    font-size: 22px !important;
+    font-weight: bold !important;
+    height: 60px !important;
+    width: 100% !important;
+    border-radius: 15px !important;
+    border: none !important;
+}
+</style>
+""", unsafe_allow_html=True)
+
+if st.button("🚪 LOGOUT - VELIYA PO! 🔴"):
     st.session_state.logged_in = False
     st.rerun()
 
